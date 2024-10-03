@@ -1,19 +1,37 @@
+from xml.etree.ElementTree import Element
+
 from .address import Address
+from .entity import Entity
 
 
-class PayeeAddress(Address):
-    def __init__(self):
+class PayeeAddress(Entity):
+    entity_name = "ADDRESS"
+
+    def __init__(self) -> None:
         super().__init__()
-        self.postCode: str = ""
+        self.telephone: str = ""
         self.state: str = ""
+        self.city: str = ""
+        self.street: str = ""
+        self.postCode: str = ""
 
-    @classmethod
-    def from_xml(cls, node):
-        address = cls()
-        address.init_from_xml(node)
-        return address
+    def init_from_xml(self, node: Element) -> None:
+        self.telephone = node.attrib["telephone"]
+        self.state = node.attrib["state"]
+        self.city = node.attrib["city"]
+        self.street = node.attrib["street"]
+        self.postCode = node.attrib["postcode"]
 
-    def init_from_xml(self, node):
-        super().init_from_xml(node)
-        self.postCode = node.attrib['postcode']
-        self.state = node.attrib['state']
+    def to_xml(self) -> Element:
+        node = Element(self.entity_name)
+        node.attrib["telephone"] = self.telephone
+        node.attrib["state"] = self.state
+        node.attrib["city"] = self.city
+        node.attrib["street"] = self.street
+        node.attrib["postcode"] = self.postCode
+        return node
+
+        return node
+
+    def __repr__(self) -> str:
+        return f"InstitutionAddress({self.city=}, {self.street=}, {self.telephone=}, {self.postCode=}, {self.state=})"

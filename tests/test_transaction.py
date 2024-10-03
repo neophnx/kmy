@@ -1,7 +1,9 @@
 import unittest
+from pathlib import Path
+
 from kmy.kmy import Kmy
 
-file_name = 'Test.kmy'
+file_name = Path(__file__).parent / "Test.kmy"
 
 
 class TestTransaction(unittest.TestCase):
@@ -14,23 +16,23 @@ class TestTransaction(unittest.TestCase):
         self.assertEqual(5, len(self.transactions))
 
     def test_read_postdate(self):
-        self.assertEqual('2020-01-01', self.transaction0.postDate)
+        self.assertEqual("2020-01-01", self.transaction0.postDate)
 
     def test_read_memo(self):
-        self.assertEqual('', self.transaction0.memo)
+        self.assertEqual("", self.transaction0.memo)
 
     def test_read_commodity(self):
-        self.assertEqual('USD', self.transaction0.commodity)
+        self.assertEqual("USD", self.transaction0.commodity)
 
     def test_read_entrydate(self):
-        self.assertEqual('2020-12-13', self.transaction0.entryDate)
+        self.assertEqual("2020-12-13", self.transaction0.entryDate)
 
     def test_read_id(self):
-        self.assertEqual('T000000000000000001', self.transaction0.id)
+        self.assertEqual("T000000000000000001", self.transaction0.id)
 
     def test_read_splits(self):
         self.assertEqual(2, len(self.transaction0.splits))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

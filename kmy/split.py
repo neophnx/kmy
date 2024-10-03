@@ -1,5 +1,14 @@
-class Split:
-    def __init__(self):
+from xml.etree.ElementTree import Element
+
+from .container import Container
+from .entity import Entity
+from .tag import Tag, TagContainer, TagIdContainer, TagId
+
+
+class Split(Entity):
+    entity_name = "SPLIT"
+
+    def __init__(self) -> None:
         self.payee: str = ""
         self.memo: str = ""
         self.shares: str = ""
@@ -12,26 +21,51 @@ class Split:
         self.value: str = ""
         self.reconcileDate: str = ""
         self.id: str = ""
+        self.tag_ids: list[TagId] = []
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}(payee='{self.payee}', value='{self.value}')"
 
-    @classmethod
-    def from_xml(cls, node):
-        split = cls()
-        split.init_from_xml(node)
-        return split
+    def init_from_xml(self, node: Element) -> None:
+        self.payee = node.attrib["payee"]
+        self.memo = node.attrib["memo"]
+        self.shares = node.attrib["shares"]
+        self.number = node.attrib["number"]
+        self.action = node.attrib["action"]
+        self.price = node.attrib["price"]
+        self.account = node.attrib["account"]
+        self.reconcileFlag = node.attrib["reconcileflag"]
+        self.bankId = node.attrib["bankid"]
+        self.value = node.attrib["value"]
+        self.reconcileDate = node.attrib["reconciledate"]
+        self.id = node.attrib["id"]
 
-    def init_from_xml(self, node):
-        self.payee = node.attrib['payee']
-        self.memo = node.attrib['memo']
-        self.shares = node.attrib['shares']
-        self.number = node.attrib['number']
-        self.action = node.attrib['action']
-        self.price = node.attrib['price']
-        self.account = node.attrib['account']
-        self.reconcileFlag = node.attrib['reconcileflag']
-        self.bankId = node.attrib['bankid']
-        self.value = node.attrib['value']
-        self.reconcileDate = node.attrib['reconciledate']
-        self.id = node.attrib['id']
+        for sub_node in node.findall(TagId.entity_name):
+            self.tag_ids.append(TagId.from_xml(sub_node))
+
+    def to_xml(self) -> Element:
+        node = Element("SPLIT")
+        node.attrib["payee"] = self.payee
+        node.attrib["memo"] = self.memo
+        node.attrib["shares"] = self.shares
+        node.attrib["number"] = self.number
+        node.attrib["action"] = self.action
+        node.attrib["price"] = self.price
+        node.attrib["account"] = self.account
+        node.attrib["reconcileflag"] = self.reconcileFlag
+        node.attrib["bankid"] = self.bankId
+        node.attrib["value"] = self.value
+        node.attrib["reconciledate"] = self.reconcileDate
+        node.attrib["id"] = self.id
+
+        for tag in self.tag_ids:
+            node.append(tag.to_xml())
+        return node
+
+
+class SplitContainer(Container[Split]):
+    entity_name = "SPLITS"
+    entity_class = Split
+
+    def __init__(self) -> None:
+        super().__init__(export_counts=False)

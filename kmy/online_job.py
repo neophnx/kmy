@@ -4,8 +4,8 @@ from .entity import Entity
 from .container import Container
 
 
-class CostCenter(Entity):
-    entity_name = "COSTCENTER"
+class OnlineJob(Entity):
+    entity_name = "ONLINEJOB"
 
     def init_from_xml(self, node: Element) -> None:
         raise NotImplementedError()
@@ -17,6 +17,6 @@ class CostCenter(Entity):
         raise NotImplementedError()
 
 
-class CostCenterContainer(Container[CostCenter]):
-    entity_name = "COSTCENTERS"
-    entity_class = CostCenter
+class OnlineJobContainer(Container[OnlineJob]):
+    entity_name = "ONLINEJOBS"
+    entity_class = OnlineJob

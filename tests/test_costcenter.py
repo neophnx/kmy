@@ -1,7 +1,9 @@
 import unittest
+from pathlib import Path
+
 from kmy.kmy import Kmy
 
-file_name = 'Test.kmy'
+file_name = Path(__file__).parent / "Test.kmy"
 
 
 class TestCostCenter(unittest.TestCase):
@@ -13,5 +15,5 @@ class TestCostCenter(unittest.TestCase):
         self.assertEqual(0, len(self.costCenters))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

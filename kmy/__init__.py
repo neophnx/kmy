@@ -8,7 +8,7 @@ from .kmy import Kmy
 from .payee import Payee
 from .payeeaddress import PayeeAddress
 from .split import Split
-from .subaccount import SubAccount
+from .sub_account import SubAccount
 from .tag import Tag
 from .transaction import Transaction
 from .user import User

@@ -1,7 +1,9 @@
 import unittest
+from pathlib import Path
+
 from kmy.kmy import Kmy
 
-file_name = 'Test.kmy'
+file_name = Path(__file__).parent / "Test.kmy"
 
 
 class TestInstitutionAddress(unittest.TestCase):
@@ -10,17 +12,17 @@ class TestInstitutionAddress(unittest.TestCase):
         self.address = mm.institutions[0].address
 
     def test_read_telephone(self):
-        self.assertEqual('', self.address.telephone)
+        self.assertEqual("", self.address.telephone)
 
     def test_read_city(self):
-        self.assertEqual('', self.address.city)
+        self.assertEqual("", self.address.city)
 
     def test_read_zip(self):
-        self.assertEqual('', self.address.zip)
+        self.assertEqual("", self.address.zip)
 
     def test_read_street(self):
-        self.assertEqual('', self.address.street)
+        self.assertEqual("", self.address.street)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -1,17 +1,30 @@
-from .address import Address
+from xml.etree.ElementTree import Element
+
+from .entity import Entity
 
 
-class InstitutionAddress(Address):
-    def __init__(self):
-        super().__init__()
+class InstitutionAddress(Entity):
+    entity_name = "ADDRESS"
+
+    def __init__(self) -> None:
+        self.telephone: str = ""
+        self.city: str = ""
         self.zip: str = ""
+        self.street: str = ""
 
-    @classmethod
-    def from_xml(cls, node):
-        address = cls()
-        address.init_from_xml(node)
-        return address
+    def init_from_xml(self, node: Element) -> None:
+        self.telephone = node.attrib["telephone"]
+        self.city = node.attrib["city"]
+        self.zip = node.attrib["zip"]
+        self.street = node.attrib["street"]
 
-    def init_from_xml(self, node):
-        super().init_from_xml(node)
-        self.zip = node.attrib['zip']
+    def to_xml(self) -> Element:
+        node = Element(self.entity_name)
+        node.attrib["telephone"] = self.telephone
+        node.attrib["city"] = self.city
+        node.attrib["zip"] = self.zip
+        node.attrib["street"] = self.street
+        return node
+
+    def __repr__(self) -> str:
+        return f"InstitutionAddress({self.city=}, {self.street=}, {self.telephone=}, {self.zip=})"
