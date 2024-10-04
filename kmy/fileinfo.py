@@ -1,6 +1,7 @@
 from xml.etree.ElementTree import Element
 
 from .entity import Entity
+from .entity_id import EntityId
 
 
 class CreationDate(Entity):
@@ -27,27 +28,11 @@ class LastModifiedDate(CreationDate):
     entity_name = "LAST_MODIFIED_DATE"
 
 
-class Version(Entity):
+class Version(EntityId):
     entity_name = "VERSION"
 
-    def __init__(
-        self,
-    ) -> None:
-        self.id: str = ""
 
-    def init_from_xml(self, node: Element) -> None:
-        self.id = node.attrib.get("id", "")
-
-    def to_xml(self) -> Element:
-        node = Element(self.entity_name)
-        node.attrib["id"] = self.id
-        return node
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.id=})"
-
-
-class FixVersion(Version):
+class FixVersion(EntityId):
     entity_name = "FIXVERSION"
 
 
@@ -55,25 +40,28 @@ class FileInfo(Entity):
     entity_name = "FILEINFO"
 
     def __init__(self) -> None:
-        self.creationDate: CreationDate = CreationDate()
-        self.lastModifiedDate: LastModifiedDate = LastModifiedDate()
+        self.creation_date: CreationDate = CreationDate()
+        self.last_modified_date: LastModifiedDate = LastModifiedDate()
         self.version: Version = Version()
-        self.fixVersion: FixVersion = FixVersion()
+        self.fix_version: FixVersion = FixVersion()
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(creationDate='{self.creationDate}', lastModifiedDate={self.lastModifiedDate})"
+        return (
+            f"{self.__class__.__name__}(creationDate='{self.creation_date}',"
+            f" lastModifiedDate={self.last_modified_date})"
+        )
 
     def init_from_xml(self, node: Element) -> None:
-        self.creationDate = CreationDate.from_parent_xml(node)
-        self.lastModifiedDate = LastModifiedDate.from_parent_xml(node)
+        self.creation_date = CreationDate.from_parent_xml(node)
+        self.last_modified_date = LastModifiedDate.from_parent_xml(node)
         self.version = Version.from_parent_xml(node)
-        self.fixVersion = FixVersion.from_parent_xml(node)
+        self.fix_version = FixVersion.from_parent_xml(node)
 
     def to_xml(self) -> Element:
         node = Element("FILEINFO")
 
-        node.append(self.creationDate.to_xml())
-        node.append(self.lastModifiedDate.to_xml())
+        node.append(self.creation_date.to_xml())
+        node.append(self.last_modified_date.to_xml())
         node.append(self.version.to_xml())
-        node.append(self.fixVersion.to_xml())
+        node.append(self.fix_version.to_xml())
         return node

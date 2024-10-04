@@ -19,7 +19,7 @@ class TestTag(unittest.TestCase):
         self.assertEqual(False, self.tag0.closed)
 
     def test_read_tagcolor(self):
-        self.assertEqual("#000000", self.tag0.tagColor)
+        self.assertEqual("#000000", self.tag0.tag_color)
 
     def test_read_name(self):
         self.assertEqual("Bar Tag", self.tag0.name)

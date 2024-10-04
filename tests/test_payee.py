@@ -28,7 +28,7 @@ class TestPayee(unittest.TestCase):
         self.assertEqual("P000001", self.payee0.id)
 
     def test_read_matching_enabled(self):
-        self.assertEqual(False, self.payee0.matchingEnabled)
+        self.assertEqual(False, self.payee0.matching_enabled)
 
 
 if __name__ == "__main__":

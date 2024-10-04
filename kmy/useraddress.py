@@ -1,7 +1,5 @@
 from xml.etree.ElementTree import Element
 
-
-from .address import Address
 from .entity import Entity
 
 
@@ -13,14 +11,14 @@ class UserAddress(Entity):
         self.telephone: str = ""
         self.county: str = ""
         self.city: str = ""
-        self.zipcode: str = ""
+        self.zip_code: str = ""
         self.street: str = ""
 
     def init_from_xml(self, node: Element) -> None:
         self.telephone = node.get("telephone", "")
         self.county = node.attrib.get("county", "")
         self.city = node.attrib.get("city", "")
-        self.zipcode = node.attrib.get("zipcode", "")
+        self.zip_code = node.attrib.get("zipcode", "")
         self.street = node.attrib.get("street", "")
 
     def to_xml(self) -> Element:
@@ -28,9 +26,12 @@ class UserAddress(Entity):
         node.attrib["telephone"] = self.telephone
         node.attrib["county"] = self.county
         node.attrib["city"] = self.city
-        node.attrib["zipcode"] = self.zipcode
+        node.attrib["zipcode"] = self.zip_code
         node.attrib["street"] = self.street
         return node
 
     def __repr__(self) -> str:
-        return f"InstitutionAddress({self.city=}, {self.street=}, {self.telephone=}, {self.zipcode=}, {self.county=})"
+        return (
+            f"InstitutionAddress({self.city=}, {self.street=}, "
+            f"{self.telephone=}, {self.zip_code=}, {self.county=})"
+        )

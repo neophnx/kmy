@@ -1,4 +1,3 @@
-from typing import TypeVar
 from xml.etree.ElementTree import Element
 
 from .container import Container

@@ -2,7 +2,7 @@ from xml.etree.ElementTree import Element
 
 from .container import Container
 from .entity import Entity
-from .tag import Tag, TagContainer, TagIdContainer, TagId
+from .tag import TagId
 
 
 class Split(Entity):
@@ -16,10 +16,10 @@ class Split(Entity):
         self.action: str = ""
         self.price: str = ""
         self.account: str = ""
-        self.reconcileFlag: str = ""
-        self.bankId: str = ""
+        self.reconcile_flag: str = ""
+        self.bank_id: str = ""
         self.value: str = ""
-        self.reconcileDate: str = ""
+        self.reconcile_date: str = ""
         self.id: str = ""
         self.tag_ids: list[TagId] = []
 
@@ -34,10 +34,10 @@ class Split(Entity):
         self.action = node.attrib["action"]
         self.price = node.attrib["price"]
         self.account = node.attrib["account"]
-        self.reconcileFlag = node.attrib["reconcileflag"]
-        self.bankId = node.attrib["bankid"]
+        self.reconcile_flag = node.attrib["reconcileflag"]
+        self.bank_id = node.attrib["bankid"]
         self.value = node.attrib["value"]
-        self.reconcileDate = node.attrib["reconciledate"]
+        self.reconcile_date = node.attrib["reconciledate"]
         self.id = node.attrib["id"]
 
         for sub_node in node.findall(TagId.entity_name):
@@ -52,10 +52,10 @@ class Split(Entity):
         node.attrib["action"] = self.action
         node.attrib["price"] = self.price
         node.attrib["account"] = self.account
-        node.attrib["reconcileflag"] = self.reconcileFlag
-        node.attrib["bankid"] = self.bankId
+        node.attrib["reconcileflag"] = self.reconcile_flag
+        node.attrib["bankid"] = self.bank_id
         node.attrib["value"] = self.value
-        node.attrib["reconciledate"] = self.reconcileDate
+        node.attrib["reconciledate"] = self.reconcile_date
         node.attrib["id"] = self.id
 
         for tag in self.tag_ids:

@@ -24,7 +24,7 @@ class TestPayeeAddress(unittest.TestCase):
         self.assertEqual("123 Street\n42 Something", self.address.street)
 
     def test_read_postcode(self):
-        self.assertEqual("WHO 123", self.address.postCode)
+        self.assertEqual("WHO 123", self.address.post_code)
 
 
 if __name__ == "__main__":

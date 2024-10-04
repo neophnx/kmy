@@ -34,8 +34,7 @@ class Container(Entity, Generic[E]):
         nodes = node.findall(cls.entity_name)
         if len(nodes) == 0:
             return cls()
-        else:
-            return super().from_parent_xml(node)
+        return super().from_parent_xml(node)
 
     def __len__(self) -> int:
         return len(self.entities)

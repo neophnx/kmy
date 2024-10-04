@@ -21,7 +21,7 @@ class TestUserAddress(unittest.TestCase):
         self.assertEqual("Town", self.useraddress.city)
 
     def test_read_zipcode(self):
-        self.assertEqual("PostalCode", self.useraddress.zipcode)
+        self.assertEqual("PostalCode", self.useraddress.zip_code)
 
     def test_read_street(self):
         self.assertEqual("Street", self.useraddress.street)

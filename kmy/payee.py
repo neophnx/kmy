@@ -14,7 +14,10 @@ class Payee(Entity):
         self.email: str = ""
         self.notes: str = ""
         self.id: str = ""
-        self.matchingEnabled: bool = False
+        self.matching_enabled: bool = False
+        self.usingmatchkey: str | None = None
+        self.matchkey: str | None = None
+        self.matchignorecase: str | None = None
         self.address: PayeeAddress = PayeeAddress()
 
     def __repr__(self) -> str:
@@ -26,7 +29,10 @@ class Payee(Entity):
         self.email = node.attrib["email"]
         self.notes = node.attrib.get("notes", "")
         self.id = node.attrib["id"]
-        self.matchingEnabled = node.attrib["matchingenabled"] != "0"
+        self.matching_enabled = node.attrib["matchingenabled"] != "0"
+        self.usingmatchkey = node.attrib.get("usingmatchkey", None)
+        self.matchkey = node.attrib.get("matchkey", None)
+        self.matchignorecase = node.attrib.get("matchignorecase", None)
         address_node = node.find("ADDRESS")
         if address_node is not None:
             self.address = PayeeAddress.from_xml(address_node)
@@ -39,7 +45,13 @@ class Payee(Entity):
         if self.notes:
             node.attrib["notes"] = self.notes
         node.attrib["id"] = self.id
-        node.attrib["matchingenabled"] = str(int(self.matchingEnabled))
+        node.attrib["matchingenabled"] = str(int(self.matching_enabled))
+        if self.usingmatchkey:
+            node.attrib["usingmatchkey"] = self.usingmatchkey
+        if self.matchkey:
+            node.attrib["matchkey"] = self.matchkey
+        if self.matchignorecase:
+            node.attrib["matchignorecase"] = str(self.matchignorecase)
         node.append(self.address.to_xml())
         return node
 

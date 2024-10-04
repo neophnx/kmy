@@ -1,8 +1,7 @@
-from typing import Type
 from xml.etree.ElementTree import Element
 
 from kmy.container import Container
-from kmy.entity import Entity, C
+from kmy.entity import Entity
 
 
 class Currency(Entity):

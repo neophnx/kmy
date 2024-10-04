@@ -9,7 +9,7 @@ class Tag(Entity):
 
     def __init__(self) -> None:
         self.closed: bool = False
-        self.tagColor: str = ""
+        self.tag_color: str = ""
         self.name: str = ""
         self.id: str = ""
 
@@ -18,14 +18,14 @@ class Tag(Entity):
 
     def init_from_xml(self, node: Element) -> None:
         self.closed = node.attrib["closed"] != "0"
-        self.tagColor = node.attrib["tagcolor"]
+        self.tag_color = node.attrib["tagcolor"]
         self.name = node.attrib["name"]
         self.id = node.attrib["id"]
 
     def to_xml(self) -> Element:
         node = Element(self.entity_name)
         node.attrib["closed"] = str(int(self.closed))
-        node.attrib["tagcolor"] = self.tagColor
+        node.attrib["tagcolor"] = self.tag_color
         node.attrib["name"] = self.name
         node.attrib["id"] = self.id
         return node

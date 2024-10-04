@@ -37,16 +37,16 @@ class TestSplit(unittest.TestCase):
         self.assertEqual("A000001", self.split0.account)
 
     def test_read_reconcileflag(self):
-        self.assertEqual("0", self.split0.reconcileFlag)
+        self.assertEqual("0", self.split0.reconcile_flag)
 
     def test_read_bankid(self):
-        self.assertEqual("", self.split0.bankId)
+        self.assertEqual("", self.split0.bank_id)
 
     def test_read_value(self):
         self.assertEqual("42/1", self.split0.value)
 
     def test_read_reconciledate(self):
-        self.assertEqual("", self.split0.reconcileDate)
+        self.assertEqual("", self.split0.reconcile_date)
 
     def test_read_id(self):
         self.assertEqual("S0001", self.split0.id)

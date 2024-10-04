@@ -20,10 +20,7 @@ class Entity(ABC):
         sub_nodes = node.findall(cls.entity_name)
         if len(sub_nodes) == 1:
             return cls.from_xml(sub_nodes[0])
-        else:
-            raise ValueError(
-                f"from_parent_xml requires a single {cls.entity_name} entity"
-            )
+        raise ValueError(f"from_parent_xml requires a single {cls.entity_name} entity")
 
     @abstractmethod
     def init_from_xml(self, node: Element) -> None:

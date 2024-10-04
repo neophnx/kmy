@@ -19,7 +19,7 @@ class TestAccount(unittest.TestCase):
         self.assertEqual("", self.account0.number)
 
     def test_read_lastmodified(self) -> None:
-        self.assertEqual("", self.account0.lastModified)
+        self.assertEqual("", self.account0.last_modified)
 
     def test_read_institution(self) -> None:
         self.assertEqual("", self.account0.institution)
@@ -31,10 +31,10 @@ class TestAccount(unittest.TestCase):
         self.assertEqual("USD", self.account0.currency)
 
     def test_read_parentaccount(self) -> None:
-        self.assertEqual("", self.account0.parentAccount)
+        self.assertEqual("", self.account0.parent_account)
 
     def test_read_lastreconciled(self) -> None:
-        self.assertEqual("", self.account0.lastReconciled)
+        self.assertEqual("", self.account0.last_reconciled)
 
     def test_read_description(self) -> None:
         self.assertEqual("", self.account0.description)
@@ -49,10 +49,10 @@ class TestAccount(unittest.TestCase):
         self.assertEqual("AStd::Asset", self.account0.id)
 
     def test_read_subaccounts(self) -> None:
-        self.assertEqual(1, len(self.account0.subAccounts))
+        self.assertEqual(1, len(self.account0.sub_accounts))
 
     def test_read_subaccount_id(self) -> None:
-        self.assertEqual("A000001", self.account0.subAccounts[0].id)
+        self.assertEqual("A000001", self.account0.sub_accounts[0].id)
 
 
 if __name__ == "__main__":
