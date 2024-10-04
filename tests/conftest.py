@@ -3,13 +3,13 @@ from typing import Iterator  # pylint: disable=unused-import
 
 import pytest
 
-from kmy import Kmy
+from kmy.xml_storage.kmy import Kmy
 
-TEST_DIR = Path(__file__).parent
+TEST_FILE_DIR = Path(__file__).parent / "files"
 
 
-SIMPLE: Path = TEST_DIR / "files" / "Test.kmy"
-FULL: Path = TEST_DIR / "files" / "Test-full.kmy"
+SIMPLE: Path = TEST_FILE_DIR / "Test.kmy"
+FULL: Path = TEST_FILE_DIR / "Test-full.kmy"
 
 TEST_CASES = [SIMPLE, FULL]
 
