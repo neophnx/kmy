@@ -4,6 +4,7 @@ from os import PathLike  # pylint: disable=unused-import
 
 from kmy.xml_storage.account.account import AccountContainer
 from kmy.xml_storage.budget.budget import BudgetContainer
+from kmy.xml_storage.common.entity import Entity
 from kmy.xml_storage.common.key_value_pair import KeyValuePairContainer
 from kmy.xml_storage.cost_center.cost_center import CostCenterContainer
 from kmy.xml_storage.currency.currency import CurrencyContainer
@@ -20,7 +21,7 @@ from kmy.xml_storage.transaction.transaction import TransactionContainer
 from kmy.xml_storage.user.user import User
 
 
-class Kmy:
+class Kmy(Entity):
     def __init__(self) -> None:
         self.file_info: FileInfo = FileInfo()
         self.user: User = User()
