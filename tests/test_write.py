@@ -1,6 +1,5 @@
 import gzip
 from itertools import zip_longest
-from pathlib import Path
 from xml.etree.ElementTree import (
     parse,
     Element,
@@ -9,11 +8,11 @@ from xml.etree.ElementTree import (
 
 import pytest
 
+from conftest import TEST_CASES
 from kmy import Kmy
 
-test_dir = Path(__file__).parent
 
-VERBOSE = False
+VERBOSE = True
 
 
 def compare_xml(node1: Element, node2: Element) -> None:
@@ -39,16 +38,25 @@ def compare_xml(node1: Element, node2: Element) -> None:
         node2.tail = None
 
     assert node1.tail == node2.tail, (node1, node2)
+
+    for key in set(node1.attrib.keys()).union(set(node2.attrib.keys())):
+        if VERBOSE:
+            print(
+                f"  attrib {key=} | {node1.attrib.get(key, None)} {node2.attrib.get(key, None)}"
+            )
+        assert node1.attrib.get(key, None) == node2.attrib.get(key, None), (
+            node1,
+            node2,
+        )
+
     assert node1.attrib == node2.attrib
 
     for sub_node1, sub_node2 in zip_longest(node1, node2):
         compare_xml(sub_node1, sub_node2)
 
 
-@pytest.mark.parametrize("file_name", ["Test.kmy", "Test-full.kmy"])
-def test_to_xml(file_name) -> None:
-
-    path = test_dir / file_name
+@pytest.mark.parametrize("path", TEST_CASES)
+def test_to_xml(path) -> None:
 
     mm = Kmy.from_kmy_file(path)
 

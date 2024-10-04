@@ -46,7 +46,7 @@ class Report(Entity):
         self.type: str = ""
         self.favorite: str = ""
         self.convert_currency: str = ""
-        self.skip_eero: str = ""
+        self.skip_zero: str = ""
         self.name: str = ""
         self.chart_ch_grid_lines: str = ""
         self.data_range_end: str = ""
@@ -57,44 +57,44 @@ class Report(Entity):
     def init_from_xml(self, node: Element) -> None:
         self.include_moving_average = node.attrib.get("includesmovingaverage", "")
         self.include_schedules = node.attrib.get("includeschedules", "")
-        self.row_type = node.attrib.get("", "")
-        self.detail = node.attrib.get("", "")
-        self.include_unused = node.attrib.get("", "")
-        self.neg_expenses = node.attrib.get("", "")
-        self.investments = node.attrib.get("", "")
-        self.id = node.attrib.get("", "")
-        self.data_major_tick = node.attrib.get("", "")
-        self.column_type = node.attrib.get("", "")
-        self.include_transfers = node.attrib.get("", "")
-        self.y_labels_precision = node.attrib.get("", "")
-        self.show_row_totals = node.attrib.get("", "")
-        self.log_y_axis = node.attrib.get("", "")
-        self.mixed_time = node.attrib.get("", "")
-        self.include_average_price = node.attrib.get("", "")
-        self.include_actuals = node.attrib.get("", "")
-        self.chart_line_width = node.attrib.get("", "")
-        self.data_minor_tick = node.attrib.get("", "")
-        self.chart_by_default = node.attrib.get("", "")
-        self.data_range_start = node.attrib.get("", "")
-        self.include_price = node.attrib.get("", "")
-        self.group = node.attrib.get("", "")
-        self.date_lock = node.attrib.get("", "")
-        self.chart_data_labels = node.attrib.get("", "")
-        self.chart_palette = node.attrib.get("", "")
-        self.chart_type = node.attrib.get("", "")
-        self.data_lock = node.attrib.get("", "")
-        self.columns_are_days = node.attrib.get("", "")
-        self.include_forecast = node.attrib.get("", "")
-        self.comment = node.attrib.get("", "")
-        self.show_column_totals = node.attrib.get("", "")
-        self.charts_v_grid_lines = node.attrib.get("", "")
-        self.type = node.attrib.get("", "")
-        self.favorite = node.attrib.get("", "")
-        self.convert_currency = node.attrib.get("", "")
-        self.skip_eero = node.attrib.get("", "")
-        self.name = node.attrib.get("", "")
-        self.chart_ch_grid_lines = node.attrib.get("", "")
-        self.data_range_end = node.attrib.get("", "")
+        self.row_type = node.attrib.get("rowtype", "")
+        self.detail = node.attrib.get("detail", "")
+        self.include_unused = node.attrib.get("includeunused", "")
+        self.neg_expenses = node.attrib.get("negexpenses", "")
+        self.investments = node.attrib.get("investments", "")
+        self.id = node.attrib.get("id", "")
+        self.data_major_tick = node.attrib.get("dataMajorTick", "")
+        self.column_type = node.attrib.get("columntype", "")
+        self.include_transfers = node.attrib.get("includestransfers", "")
+        self.y_labels_precision = node.attrib.get("yLabelsPrecision", "")
+        self.show_row_totals = node.attrib.get("showrowtotals", "")
+        self.log_y_axis = node.attrib.get("logYaxis", "")
+        self.mixed_time = node.attrib.get("mixedtime", "")
+        self.include_average_price = node.attrib.get("includesaverageprice", "")
+        self.include_actuals = node.attrib.get("includesactuals", "")
+        self.chart_line_width = node.attrib.get("chartlinewidth", "")
+        self.data_minor_tick = node.attrib.get("dataMinorTick", "")
+        self.chart_by_default = node.attrib.get("chartbydefault", "")
+        self.data_range_start = node.attrib.get("dataRangeStart", "")
+        self.include_price = node.attrib.get("includesprice", "")
+        self.group = node.attrib.get("group", "")
+        self.date_lock = node.attrib.get("datelock", "")
+        self.chart_data_labels = node.attrib.get("chartdatalabels", "")
+        self.chart_palette = node.attrib.get("chartpalette", "")
+        self.chart_type = node.attrib.get("charttype", "")
+        self.data_lock = node.attrib.get("datalock", "")
+        self.columns_are_days = node.attrib.get("columnsaredays", "")
+        self.include_forecast = node.attrib.get("includesforecast", "")
+        self.comment = node.attrib.get("comment", "")
+        self.show_column_totals = node.attrib.get("showcolumntotals", "")
+        self.charts_v_grid_lines = node.attrib.get("chartsvgridlines", "")
+        self.type = node.attrib.get("type", "")
+        self.favorite = node.attrib.get("favorite", "")
+        self.convert_currency = node.attrib.get("convertcurrency", "")
+        self.skip_zero = node.attrib.get("skipZero", "")
+        self.name = node.attrib.get("name", "")
+        self.chart_ch_grid_lines = node.attrib.get("chartchgridlines", "")
+        self.data_range_end = node.attrib.get("dataRangeEnd", "")
 
         for sub_node in node.findall(AccountGroup.entity_name):
             self.account_groups.append(AccountGroup.from_xml(sub_node))
@@ -128,6 +128,7 @@ class Report(Entity):
         node.attrib["group"] = self.group
         node.attrib["datelock"] = self.date_lock
         node.attrib["chartdatalabels"] = self.chart_data_labels
+        node.attrib["chartpalette"] = self.chart_palette
         node.attrib["charttype"] = self.chart_type
         node.attrib["datalock"] = self.data_lock
         node.attrib["columnsaredays"] = self.columns_are_days
@@ -138,10 +139,12 @@ class Report(Entity):
         node.attrib["type"] = self.type
         node.attrib["favorite"] = self.favorite
         node.attrib["convertcurrency"] = self.convert_currency
-        node.attrib["skipZero"] = self.skip_eero
+        node.attrib["skipZero"] = self.skip_zero
         node.attrib["name"] = self.name
         node.attrib["chartbydefault"] = self.chart_by_default
+        node.attrib["chartchgridlines"] = self.chart_ch_grid_lines
         node.attrib["dataRangeEnd"] = self.data_range_end
+
         for account_group in self.account_groups:
             node.append(account_group.to_xml())
         for dates in self.dates:

@@ -1,28 +1,26 @@
-import unittest
-from pathlib import Path
+from typing import Iterator  # pylint: disable=unused-import
 
-from kmy.kmy import Kmy
+import pytest
 
-file_name = Path(__file__).parent / "Test.kmy"
-
-
-class TestInstitutionAddress(unittest.TestCase):
-    def setUp(self):
-        mm = Kmy.from_kmy_file(file_name)
-        self.address = mm.institutions[0].address
-
-    def test_read_telephone(self):
-        self.assertEqual("", self.address.telephone)
-
-    def test_read_city(self):
-        self.assertEqual("", self.address.city)
-
-    def test_read_zip(self):
-        self.assertEqual("", self.address.zip)
-
-    def test_read_street(self):
-        self.assertEqual("", self.address.street)
+from kmy import Kmy, InstitutionAddress
 
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.fixture(name="address")
+def fixture_address(mm_simple: Kmy) -> "Iterator[InstitutionAddress]":
+    yield mm_simple.institutions[0].address
+
+
+def test_read_telephone(address: InstitutionAddress) -> None:
+    assert "" == address.telephone
+
+
+def test_read_city(address: InstitutionAddress) -> None:
+    assert "" == address.city
+
+
+def test_read_zip(address: InstitutionAddress) -> None:
+    assert "" == address.zip
+
+
+def test_read_street(address: InstitutionAddress) -> None:
+    assert "" == address.street

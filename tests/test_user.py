@@ -1,22 +1,9 @@
-import unittest
-from pathlib import Path
-
-from kmy.kmy import Kmy
-
-file_name = Path(__file__).parent / "Test.kmy"
+from kmy import Kmy
 
 
-class TestUser(unittest.TestCase):
-    def setUp(self):
-        mm = Kmy.from_kmy_file(file_name)
-        self.user = mm.user
-
-    def test_read_name(self):
-        self.assertEqual("Your name", self.user.name)
-
-    def test_read_email(self):
-        self.assertEqual("Email", self.user.email)
+def test_read_name(mm_simple: Kmy) -> None:
+    assert "Your name" == mm_simple.user.name
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_read_email(mm_simple: Kmy) -> None:
+    assert "Email" == mm_simple.user.email

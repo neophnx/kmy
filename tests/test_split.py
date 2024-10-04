@@ -1,56 +1,60 @@
-import unittest
-from pathlib import Path
+import pytest
 
-from kmy.kmy import Kmy
-
-file_name = Path(__file__).parent / "Test.kmy"
+from kmy import Kmy, Split
 
 
-class TestSplit(unittest.TestCase):
-    def setUp(self):
-        mm = Kmy.from_kmy_file(file_name)
-        self.splits = mm.transactions[0].splits
-        self.split0 = self.splits[0]
-
-    def test_read_splits_count(self):
-        self.assertEqual(2, len(self.splits))
-
-    def test_read_payee(self):
-        self.assertEqual("", self.split0.payee)
-
-    def test_read_memo(self):
-        self.assertEqual("", self.split0.memo)
-
-    def test_read_shares(self):
-        self.assertEqual("42/1", self.split0.shares)
-
-    def test_read_number(self):
-        self.assertEqual("", self.split0.number)
-
-    def test_read_action(self):
-        self.assertEqual("", self.split0.action)
-
-    def test_read_price(self):
-        self.assertEqual("1/1", self.split0.price)
-
-    def test_read_account(self):
-        self.assertEqual("A000001", self.split0.account)
-
-    def test_read_reconcileflag(self):
-        self.assertEqual("0", self.split0.reconcile_flag)
-
-    def test_read_bankid(self):
-        self.assertEqual("", self.split0.bank_id)
-
-    def test_read_value(self):
-        self.assertEqual("42/1", self.split0.value)
-
-    def test_read_reconciledate(self):
-        self.assertEqual("", self.split0.reconcile_date)
-
-    def test_read_id(self):
-        self.assertEqual("S0001", self.split0.id)
+@pytest.fixture(name="splits")
+def fixture_splits(mm_simple: Kmy):
+    yield mm_simple.transactions[0].splits
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_read_splits_count(splits: "list[Split]") -> None:
+    assert 2 == len(splits)
+
+
+def test_read_payee(splits: "list[Split]") -> None:
+    assert "" == splits[0].payee
+
+
+def test_read_memo(splits: "list[Split]") -> None:
+    assert "" == splits[0].memo
+
+
+def test_read_shares(splits: "list[Split]") -> None:
+    assert "42/1" == splits[0].shares
+
+
+def test_read_number(splits: "list[Split]") -> None:
+    assert "" == splits[0].number
+
+
+def test_read_action(splits: "list[Split]") -> None:
+    assert "" == splits[0].action
+
+
+def test_read_price(splits: "list[Split]") -> None:
+    assert "1/1" == splits[0].price
+
+
+def test_read_account(splits: "list[Split]") -> None:
+    assert "A000001" == splits[0].account
+
+
+def test_read_reconcileflag(splits: "list[Split]") -> None:
+    assert "0" == splits[0].reconcile_flag
+
+
+def test_read_bankid(splits: "list[Split]") -> None:
+    assert "" == splits[0].bank_id
+
+
+def test_read_value(splits: "list[Split]") -> None:
+    assert "42/1" == splits[0].value
+
+
+def test_read_reconciledate(splits: "list[Split]") -> None:
+    assert "" == splits[0].reconcile_date
+
+
+def test_read_id(splits: "list[Split]") -> None:
+    assert "S0001" == splits[0].id

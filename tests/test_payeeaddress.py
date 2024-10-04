@@ -1,31 +1,30 @@
-import unittest
-from pathlib import Path
+from typing import Iterator  # pylint: disable unused-import
 
-from kmy.kmy import Kmy
+import pytest
 
-file_name = Path(__file__).parent / "Test.kmy"
-
-
-class TestPayeeAddress(unittest.TestCase):
-    def setUp(self):
-        mm = Kmy.from_kmy_file(file_name)
-        self.address = mm.payees[0].address
-
-    def test_read_telephone(self):
-        self.assertEqual("+1 312 123 4567", self.address.telephone)
-
-    def test_read_state(self):
-        self.assertEqual("WH", self.address.state)
-
-    def test_read_city(self):
-        self.assertEqual("Whoville", self.address.city)
-
-    def test_read_street(self):
-        self.assertEqual("123 Street\n42 Something", self.address.street)
-
-    def test_read_postcode(self):
-        self.assertEqual("WHO 123", self.address.post_code)
+from kmy import Kmy, PayeeAddress
 
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.fixture(name="address")
+def fixture_address(mm_simple: Kmy) -> "Iterator[PayeeAddress]":
+    yield mm_simple.payees[0].address
+
+
+def test_read_telephone(address: PayeeAddress) -> None:
+    assert "+1 312 123 4567" == address.telephone
+
+
+def test_read_state(address: PayeeAddress) -> None:
+    assert "WH" == address.state
+
+
+def test_read_city(address: PayeeAddress) -> None:
+    assert "Whoville" == address.city
+
+
+def test_read_street(address: PayeeAddress) -> None:
+    assert "123 Street\n42 Something" == address.street
+
+
+def test_read_postcode(address: PayeeAddress) -> None:
+    assert "WHO 123" == address.post_code

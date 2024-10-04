@@ -1,38 +1,29 @@
-import unittest
-from pathlib import Path
-
-from kmy.kmy import Kmy
-
-file_name = Path(__file__).parent / "Test.kmy"
+from kmy import Kmy
 
 
-class TestTransaction(unittest.TestCase):
-    def setUp(self):
-        mm = Kmy.from_kmy_file(file_name)
-        self.transactions = mm.transactions
-        self.transaction0 = self.transactions[0]
-
-    def test_read_accounts_count(self):
-        self.assertEqual(5, len(self.transactions))
-
-    def test_read_postdate(self):
-        self.assertEqual("2020-01-01", self.transaction0.post_date)
-
-    def test_read_memo(self):
-        self.assertEqual("", self.transaction0.memo)
-
-    def test_read_commodity(self):
-        self.assertEqual("USD", self.transaction0.commodity)
-
-    def test_read_entrydate(self):
-        self.assertEqual("2020-12-13", self.transaction0.entry_date)
-
-    def test_read_id(self):
-        self.assertEqual("T000000000000000001", self.transaction0.id)
-
-    def test_read_splits(self):
-        self.assertEqual(2, len(self.transaction0.splits))
+def test_read_accounts_count(mm_simple: Kmy) -> None:
+    assert 5 == len(mm_simple.transactions)
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_read_postdate(mm_simple: Kmy) -> None:
+    assert "2020-01-01" == mm_simple.transactions[0].post_date
+
+
+def test_read_memo(mm_simple: Kmy) -> None:
+    assert "" == mm_simple.transactions[0].memo
+
+
+def test_read_commodity(mm_simple: Kmy) -> None:
+    assert "USD" == mm_simple.transactions[0].commodity
+
+
+def test_read_entrydate(mm_simple: Kmy) -> None:
+    assert "2020-12-13" == mm_simple.transactions[0].entry_date
+
+
+def test_read_id(mm_simple: Kmy) -> None:
+    assert "T000000000000000001" == mm_simple.transactions[0].id
+
+
+def test_read_splits(mm_simple: Kmy) -> None:
+    assert 2 == len(mm_simple.transactions[0].splits)

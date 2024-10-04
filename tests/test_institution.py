@@ -1,37 +1,27 @@
-import unittest
-from pathlib import Path
-
-from kmy.kmy import Kmy
-
-file_name = Path(__file__).parent / "Test.kmy"
+from kmy import Kmy
 
 
-class TestInstitution(unittest.TestCase):
-    def setUp(self):
-        mm = Kmy.from_kmy_file(file_name)
-        self.institutions = mm.institutions
-        self.institution0 = self.institutions[0]
-
-    def test_read_institutions_count(self):
-        self.assertEqual(1, len(self.institutions))
-
-    def test_read_institution_sortcode(self):
-        self.assertEqual("Routing number", self.institution0.sort_code)
-
-    def test_read_institution_manager(self):
-        self.assertEqual("", self.institution0.manager)
-
-    def test_read_institution_name(self):
-        self.assertEqual("Name of the institution", self.institution0.name)
-
-    def test_read_institution_id(self):
-        self.assertEqual("I000001", self.institution0.id)
-
-    def test_read_institution_accountids(self):
-        self.assertEqual(2, len(self.institution0.account_ids))
-        self.assertEqual("A000001", self.institution0.account_ids[0].id)
-        self.assertEqual("A000003", self.institution0.account_ids[1].id)
+def test_read_institutions_count(mm_simple: Kmy) -> None:
+    assert 1 == len(mm_simple.institutions)
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_read_institution_sortcode(mm_simple: Kmy) -> None:
+    assert "Routing number" == mm_simple.institutions[0].sort_code
+
+
+def test_read_institution_manager(mm_simple: Kmy) -> None:
+    assert "" == mm_simple.institutions[0].manager
+
+
+def test_read_institution_name(mm_simple: Kmy) -> None:
+    assert "Name of the institution" == mm_simple.institutions[0].name
+
+
+def test_read_institution_id(mm_simple: Kmy) -> None:
+    assert "I000001" == mm_simple.institutions[0].id
+
+
+def test_read_institution_accountids(mm_simple: Kmy) -> None:
+    assert 2 == len(mm_simple.institutions[0].account_ids)
+    assert "A000001" == mm_simple.institutions[0].account_ids[0].id
+    assert "A000003" == mm_simple.institutions[0].account_ids[1].id

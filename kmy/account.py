@@ -26,7 +26,7 @@ class Account(Entity):
 
     def __repr__(self) -> str:
         return (
-            f"{self.__class__.__name__}(name='{self.name}', currency={self.currency})"
+            f"{self.__class__.__name__}(name={self.name!r}, currency={self.currency!r})"
         )
 
     def init_from_xml(self, node: Element) -> None:

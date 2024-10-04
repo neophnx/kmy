@@ -11,4 +11,4 @@ lint:
 
 
 test:
-	PYTHONPATH="." pytest --verbose --cov-branch --cov kmy tests
+	PYTHONPATH="." pytest --verbose --cov-report term-missing:skip-covered  --cov-branch --cov kmy tests

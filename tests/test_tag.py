@@ -1,32 +1,21 @@
-import unittest
-from pathlib import Path
-
-from kmy.kmy import Kmy
-
-file_name = Path(__file__).parent / "Test.kmy"
+from kmy import Kmy
 
 
-class TestTag(unittest.TestCase):
-    def setUp(self):
-        mm = Kmy.from_kmy_file(file_name)
-        self.tags = mm.tags
-        self.tag0 = self.tags[0]
-
-    def test_read_tags_count(self):
-        self.assertEqual(1, len(self.tags))
-
-    def test_read_closed(self):
-        self.assertEqual(False, self.tag0.closed)
-
-    def test_read_tagcolor(self):
-        self.assertEqual("#000000", self.tag0.tag_color)
-
-    def test_read_name(self):
-        self.assertEqual("Bar Tag", self.tag0.name)
-
-    def test_read_id(self):
-        self.assertEqual("G000001", self.tag0.id)
+def test_read_tags_count(mm_simple: Kmy) -> None:
+    assert 1 == len(mm_simple.tags)
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_read_closed(mm_simple: Kmy) -> None:
+    assert not mm_simple.tags[0].closed
+
+
+def test_read_tagcolor(mm_simple: Kmy) -> None:
+    assert "#000000" == mm_simple.tags[0].tag_color
+
+
+def test_read_name(mm_simple: Kmy) -> None:
+    assert "Bar Tag" == mm_simple.tags[0].name
+
+
+def test_read_id(mm_simple: Kmy) -> None:
+    assert "G000001" == mm_simple.tags[0].id
