@@ -1,5 +1,9 @@
 import gzip
+import tempfile
+from datetime import date
 from itertools import zip_longest
+from pathlib import Path
+from shutil import copyfile
 from xml.etree.ElementTree import (
     parse,
     Element,
@@ -77,3 +81,40 @@ def test_to_xml(path) -> None:
         test = mm.to_xml_tree()
 
         compare_xml(ref.getroot(), test.getroot())
+
+
+@pytest.mark.parametrize("path", TEST_CASES)
+def test_write(path):
+    mm = Kmy.from_kmy_file(path)
+
+    with tempfile.NamedTemporaryFile() as test_filename:
+        test_path = Path(test_filename.name)
+        backup_file = mm.to_kmy_file(test_path, auto_backup=False)
+
+        assert backup_file is None
+        with gzip.open(path, "rt", encoding="utf-8") as fd_ref, gzip.open(
+            test_path, "rt", encoding="utf-8"
+        ) as fd_test:
+            assert list(fd_ref.readline(2)) == list(fd_test.readline(2))
+
+        test = Kmy.from_kmy_file(test_path)
+
+        compare_xml(mm.to_xml_tree().getroot(), test.to_xml_tree().getroot())
+
+
+@pytest.mark.parametrize("path", TEST_CASES)
+def test_backup(path):
+    with tempfile.TemporaryDirectory() as work_dir:
+        ref_path = Path(work_dir) / path.name
+        copyfile(path, ref_path)
+
+        mm = Kmy.from_kmy_file(ref_path)
+        mm.file_info.last_modified_date.date.value = date(2024, 10, 11)
+        backup_file = mm.to_kmy_file(ref_path)
+        backup = Kmy.from_kmy_file(backup_file)
+
+        assert mm.file_info.last_modified_date.date == "2024-10-11"
+        assert (
+            backup.file_info.last_modified_date.date
+            != mm.file_info.last_modified_date.date
+        )

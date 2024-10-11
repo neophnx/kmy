@@ -1,6 +1,8 @@
 import gzip
 import xml.etree.ElementTree as elementTree
 from os import PathLike  # pylint: disable=unused-import
+from pathlib import Path
+from shutil import copyfile
 
 from kmy.xml_storage.account.account import AccountContainer
 from kmy.xml_storage.budget.budget import BudgetContainer
@@ -46,7 +48,9 @@ class Kmy(Entity):
 
     def to_xml_tree(self) -> elementTree.ElementTree:
         root = self.to_xml(None)
-        return elementTree.ElementTree(root)
+        tree = elementTree.ElementTree(root)
+        elementTree.indent(tree)
+        return tree
 
     @classmethod
     def from_kmy_file(cls, file_name: "PathLike[str] | str") -> "Kmy":
@@ -55,3 +59,24 @@ class Kmy(Entity):
         root = tree.getroot()
         kmm = Kmy.from_xml(root)
         return kmm
+
+    def to_kmy_file(
+        self, file_name: "PathLike[str] | str", auto_backup: bool = True
+    ) -> "Path|None":
+        file_path = Path(file_name)
+        backup_file = None
+        if auto_backup and file_path.exists():
+            i = 0
+            backup_file = file_path.parent / (file_path.name + f".{i}")
+            while backup_file.exists():
+                i += 1
+
+            copyfile(file_path, backup_file)
+            print(f"Save backup to {backup_file}")
+        with gzip.open(file_name, "wb") as file:
+            file.write(b'<?xml version="1.0" encoding="utf-8"?>\n')
+            file.write(b"<!DOCTYPE KMYMONEY-FILE>\n")
+            self.to_xml_tree().write(
+                file, encoding="UTF-8", xml_declaration=False, short_empty_elements=True
+            )
+        return backup_file
