@@ -3,7 +3,7 @@ from typing import Iterator  # pylint: disable=unused-import
 import pytest
 
 from kmy.xml_storage.institution.institution_address import InstitutionAddress
-from kmy.xml_storage.kmy import Kmy
+from kmy.kmy import Kmy
 
 
 @pytest.fixture(name="address")

@@ -1,4 +1,4 @@
-from kmy.xml_storage.kmy import Kmy
+from kmy.kmy import Kmy
 
 
 def test_read_payees_count(mm_simple: Kmy) -> None:

@@ -4,11 +4,12 @@ from xml.etree.ElementTree import (
     parse,
     Element,
     dump,
+    indent,
 )
 
 import pytest
 
-from kmy.xml_storage.kmy import Kmy
+from kmy.kmy import Kmy
 from tests.conftest import TEST_CASES
 
 VERBOSE = True
@@ -17,12 +18,24 @@ VERBOSE = True
 def compare_xml(node1: Element, node2: Element) -> None:
     if node1 is None and node2 is None:
         return
-    assert node1 is not None
-    assert node2 is not None
     if VERBOSE:
-        print(node1.tag, node2.tag)
-        dump(node1)
-        dump(node2)
+        print("=" * 50)
+        print(
+            "== node1",
+        )
+        if node1 is not None:
+            indent(node1)
+            dump(node1)
+        else:
+            print("   Empty node")
+        print("== node2")
+        if node2 is not None:
+            indent(node2)
+            dump(node2)
+        else:
+            print("   Empty node")
+    assert node1 is not None, f"node1 is None {node2}"
+    assert node2 is not None, f"node2 is None {node2}"
     assert node1.tag == node2.tag, (node1, node2)
 
     if node1.text is not None and node1.text.strip() == "":
@@ -41,9 +54,9 @@ def compare_xml(node1: Element, node2: Element) -> None:
     for key in set(node1.attrib.keys()).union(set(node2.attrib.keys())):
         if VERBOSE:
             print(
-                f"  attrib {key=} | {node1.attrib.get(key, None)} {node2.attrib.get(key, None)}"
+                f"  attrib {key=} | {node1.attrib.get(key, None)!r} {node2.attrib.get(key, None)!r}"
             )
-        assert node1.attrib.get(key, None) == node2.attrib.get(key, None), (
+        assert str(node1.attrib.get(key, None)) == str(node2.attrib.get(key, None)), (
             node1,
             node2,
         )
@@ -61,6 +74,6 @@ def test_to_xml(path) -> None:
 
     with gzip.open(path, "rb") as file:
         ref = parse(file)
-        test = mm.to_xml()
+        test = mm.to_xml_tree()
 
         compare_xml(ref.getroot(), test.getroot())

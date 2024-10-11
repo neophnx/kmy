@@ -8,33 +8,44 @@ E = TypeVar("E", bound=Entity)
 
 class Container(Entity, Generic[E]):
     C = TypeVar("C", bound="Container[E]")
+    FLAT = "<FLAT>"
 
-    entity_class: Type[E]
-
-    def __init__(self, export_counts: bool = True) -> None:
-        self.entities: list[E] = []
-        self.export_counts = export_counts
-        super().__init__()
-
-    def init_from_xml(self, node: Element) -> None:
-        if node is not None:
-            for entity in node:
-                self.entities.append(self.entity_class.from_xml(entity))
-
-    def to_xml(self) -> Element:
-        node = Element(self.entity_name)
-        if self.export_counts:
-            node.attrib["count"] = str(len(self.entities))
-        for entity in self.entities:
-            node.append(entity.to_xml())
-        return node
+    entity_class: "Type[E]"
+    include_if_empty = False
+    export_counts = True
+    entities: "list[E]"
 
     @classmethod
-    def from_parent_xml(cls: "Type[C]", node: Element) -> "C":
-        nodes = node.findall(cls.entity_name)
-        if len(nodes) == 0:
-            return cls()
-        return super().from_parent_xml(node)
+    def from_xml(cls, node: Element) -> "Container[E]":
+        self = cls()
+        self.entities = []
+
+        if node is not None:
+            if self.entity_name == Container.FLAT:
+                for entity in node.findall(self.entity_class.entity_name):
+                    self.entities.append(self.entity_class.from_xml(entity))
+
+            else:
+                for entity in node:
+                    self.entities.append(self.entity_class.from_xml(entity))
+        return self
+
+    def to_xml(self, parent: "Element | None") -> "Element|None":
+        if self.entity_name == Container.FLAT:
+            assert parent is not None
+        if self.include_if_empty or len(self.entities) > 0:
+            node = Element(self.entity_name)
+            if self.export_counts:
+                node.attrib["count"] = str(len(self.entities))
+            for entity in self.entities:
+                entity.to_xml(node)
+
+            if parent is not None:
+                parent.append(node)
+                return None
+            return node
+
+        return None
 
     def __len__(self) -> int:
         return len(self.entities)

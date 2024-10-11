@@ -1,4 +1,29 @@
-from kmy.xml_storage.kmy import Kmy
+from xml.etree.ElementTree import fromstring
+
+from kmy.kmy import Kmy
+from kmy.xml_storage.institution.institution import InstitutionContainer
+from tests.xml_storage.test_write import compare_xml
+
+
+def test_institution_xml_invariant():
+    xml = fromstring(
+        """
+<INSTITUTIONS count="1">
+    <INSTITUTION sortcode="Routing number" manager="" name="Name of the institution" id="I000001">
+        <ADDRESS telephone="" city="" zip="" street=""/>
+        <ACCOUNTIDS>
+            <ACCOUNTID id="A000001"/>
+            <ACCOUNTID id="A000003"/>
+        </ACCOUNTIDS>
+    </INSTITUTION>
+</INSTITUTIONS>
+"""
+    )
+    institutions = InstitutionContainer.from_xml(xml)
+    test = institutions.to_xml(None)
+
+    assert test is not None
+    compare_xml(xml, test)
 
 
 def test_read_institutions_count(mm_simple: Kmy) -> None:

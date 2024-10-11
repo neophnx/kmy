@@ -3,7 +3,7 @@ from typing import Iterator  # pylint: disable=unused-import
 
 import pytest
 
-from kmy.xml_storage.kmy import Kmy
+from kmy.kmy import Kmy
 
 TEST_FILE_DIR = Path(__file__).parent / "files"
 

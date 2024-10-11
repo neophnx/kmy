@@ -9,6 +9,4 @@ class AccountId(EntityId):
 class AccountIdContainer(Container[AccountId]):
     entity_name = "ACCOUNTIDS"
     entity_class = AccountId
-
-    def __init__(self) -> None:
-        super().__init__(export_counts=False)
+    export_counts = False

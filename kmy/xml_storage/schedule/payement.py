@@ -9,6 +9,5 @@ class Payment(Entity):
 class PaymentContainer(Container[Payment]):
     entity_name = "PAYMENTS"
     entity_class = Payment
-
-    def __init__(self) -> None:
-        super().__init__(export_counts=False)
+    include_if_empty = True
+    export_counts = False

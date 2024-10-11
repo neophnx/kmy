@@ -1,7 +1,32 @@
+from xml.etree.ElementTree import fromstring
+
 import pytest
 
-from kmy.xml_storage.kmy import Kmy
-from kmy.xml_storage.transaction.split import Split
+from kmy.kmy import Kmy
+from kmy.xml_storage.transaction.split import Split, SplitContainer
+from tests.xml_storage.test_write import compare_xml
+
+
+def test_splits_xml_invariant():
+    xml = fromstring(
+        """
+<SPLITS>
+  <SPLIT payee="P000001" memo="The Memo" shares="0/1" number=""
+         action="" price="1/1" account="A000001" reconcileflag="0"
+         bankid="" value="0/1" reconciledate="" id="S0001">
+    <TAG id="G000001" />
+  </SPLIT>
+  <SPLIT payee="" memo="The Memo" shares="0/1" number="" action=""
+         price="1/1" account="A000004" reconcileflag="0" bankid=""
+          value="0/1" reconciledate="" id="S0002" />
+</SPLITS>
+"""
+    )
+    splits = SplitContainer.from_xml(xml)
+    test = splits.to_xml(None)
+
+    assert test is not None
+    compare_xml(xml, test)
 
 
 @pytest.fixture(name="splits")
